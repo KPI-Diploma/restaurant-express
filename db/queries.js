@@ -14,7 +14,7 @@ const DISHES_QUERY = `
            d.uuid  AS dish_uuid,
            d.image AS dish_image
     FROM dishes d
-    WHERE d.name IN $1
+    WHERE d.name = ANY($1::text[])
 `;
 
 module.exports = {

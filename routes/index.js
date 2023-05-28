@@ -18,9 +18,7 @@ router.get('/categories', async function (req, res) {
 router.post('/recommendation', async function (req, res) {
     const domain = req.protocol + '://' + req.get('host');
     const predictions = formatPredictions(await getModelPredictions(req.body.colors));
-    const raw_dishes = await queryDatabase(DISHES_QUERY, [
-        `(${ predictions.join(', ') })`,
-    ]);
+    const raw_dishes = await queryDatabase(DISHES_QUERY, [predictions]);
     res.json(formatDishes(raw_dishes, domain));
 });
 
