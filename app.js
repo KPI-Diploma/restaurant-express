@@ -15,6 +15,7 @@ app.use(
 );
 app.use(cookieParser());
 
+app.use('/images', express.static('images'));
 app.use('/', indexRouter);
 
 module.exports = app;
