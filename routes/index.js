@@ -11,15 +11,27 @@ router.get('/', function (req, res) {
 
 router.get('/categories', async function (req, res) {
     const domain = req.protocol + '://' + req.get('host');
-    const raw_categories = await queryDatabase(CATEGORIES_QUERY);
-    res.json(formatCategories(raw_categories, domain));
+    try {
+        const raw_categories = await queryDatabase(CATEGORIES_QUERY);
+        res.status(200).json(formatCategories(raw_categories, domain));
+    } catch (e) {
+        res.status(400).send({
+            message: e.message,
+        });
+    }
 });
 
 router.post('/recommendation', async function (req, res) {
     const domain = req.protocol + '://' + req.get('host');
-    const predictions = formatPredictions(await getModelPredictions(req.body.colors));
-    const raw_dishes = await queryDatabase(DISHES_QUERY, [predictions]);
-    res.json(formatDishes(raw_dishes, domain));
+    try {
+        const predictions = formatPredictions(await getModelPredictions(req.body.colors));
+        const raw_dishes = await queryDatabase(DISHES_QUERY, [predictions]);
+        res.status(200).json(formatDishes(raw_dishes, domain));
+    } catch (e) {
+        res.status(400).send({
+            message: e.message,
+        });
+    }
 });
 
 module.exports = router;
